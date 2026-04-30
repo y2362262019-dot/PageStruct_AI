@@ -1,5 +1,8 @@
 # PageStruct AI
 
+中文说明：[`README.zh-CN.md`](README.zh-CN.md)
+English: [`README.en.md`](README.en.md)
+
 PageStruct AI 是一个基于网页抓取、内容提取和大模型标准化的网页内容解析系统。系统支持单条 URL 解析，也支持上传 CSV / Excel 文件批量创建解析任务。每条 URL 的抓取状态、正文、附件链接、大模型标准化结果和导出文件都会保存到 SQLite 数据库中，并通过 Jinja2 + HTMX 页面展示。
 
 当前代码已经完成开发文档中的第 0 到第 13 阶段，属于可运行的 MVP。
