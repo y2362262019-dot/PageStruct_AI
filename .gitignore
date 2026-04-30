@@ -14,3 +14,4 @@ backend/storage/docx/*
 
 .env
 .env.*
+!backend/.env.example

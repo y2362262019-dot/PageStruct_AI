@@ -30,11 +30,28 @@ uvicorn app.main:app --reload
 
 ## 环境变量
 
+项目启动时会自动读取：
+
+```text
+../.env
+.env
+```
+
+如果两个文件都存在，`backend/.env` 中的同名配置优先。
+
+创建本地配置：
+
 ```bash
-export LLM_API_KEY="..."
-export LLM_API_URL="https://api.openai.com/v1/chat/completions"
-export LLM_MODEL="gpt-4o-mini"
-export LLM_TIMEOUT="60"
+cp .env.example .env
+```
+
+示例：
+
+```env
+LLM_API_KEY=your-api-key
+LLM_API_URL=https://api.openai.com/v1/chat/completions
+LLM_MODEL=gpt-4o-mini
+LLM_TIMEOUT=60
 ```
 
 `LLM_API_KEY` 不配置时，系统仍可完成网页抓取、正文提取和文件导出，LLM 失败原因会保存到记录中。

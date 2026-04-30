@@ -89,16 +89,41 @@ uvicorn app.main:app --reload
 
 系统的大模型调用使用 OpenAI-compatible Chat Completions 接口。
 
-可选环境变量：
+项目启动时会自动读取以下本地配置文件：
+
+```text
+.env
+backend/.env
+```
+
+如果两个文件都存在，`backend/.env` 中的同名配置会覆盖项目根目录 `.env`。
+
+可以复制示例文件后修改：
 
 ```bash
-export LLM_API_KEY="your-api-key"
-export LLM_API_URL="https://api.openai.com/v1/chat/completions"
-export LLM_MODEL="gpt-4o-mini"
-export LLM_TIMEOUT="60"
+cd backend
+cp .env.example .env
+```
+
+`backend/.env` 示例：
+
+```bash
+LLM_API_KEY=your-api-key
+LLM_API_URL=https://api.openai.com/v1/chat/completions
+LLM_MODEL=gpt-4o-mini
+LLM_TIMEOUT=60
 ```
 
 如果没有配置 `LLM_API_KEY`，系统仍会完成网页抓取、正文提取、附件识别和文件导出。此时 `llm_json` 会保存一个 `FAILED` 类型的结果，`error_message` 会记录 LLM 配置缺失原因。
+
+本地 OpenAI-compatible 模型服务示例：
+
+```env
+LLM_API_KEY=local-dev-key
+LLM_API_URL=http://127.0.0.1:8001/v1/chat/completions
+LLM_MODEL=your-local-model-name
+LLM_TIMEOUT=120
+```
 
 ## 使用流程
 
