@@ -1,0 +1,38 @@
+{% if records %}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th class="number">序号</th>
+        <th>URL</th>
+        <th>标题</th>
+        <th>执行状态</th>
+        <th>结果类型</th>
+        <th class="number">文件数</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for record in records %}
+      <tr>
+        <td class="number">{{ loop.index }}</td>
+        <td class="truncate" title="{{ record.url }}">{{ record.url }}</td>
+        <td class="truncate" title="{{ record.title or '' }}">{{ record.title or "-" }}</td>
+        <td><span class="status status-{{ record.execute_status|lower }}">{{ record.execute_status }}</span></td>
+        <td>{{ record.result_type or "-" }}</td>
+        <td class="number">{{ record.attachments|length }}</td>
+        <td>
+          {% if record.execute_status == "COMPLETED" or record.execute_status == "FAILED" %}
+            <a class="table-action" href="/records/{{ record.id }}">查看</a>
+          {% else %}
+            <span class="muted-action">暂不可查看</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty-state">暂无解析记录。</div>
+{% endif %}

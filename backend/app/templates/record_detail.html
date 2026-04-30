@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}记录详情{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="section-heading">
+    <a class="back-link" href="/tasks/{{ record.task_id }}">返回任务详情</a>
+    <h1>{{ record.title or "解析记录" }}</h1>
+    <p>执行状态：{{ record.execute_status }} · 结果类型：{{ record.result_type or "-" }}</p>
+  </div>
+
+  {% if record.execute_status == "PENDING" or record.execute_status == "PROCESSING" %}
+    <div class="empty-state">该记录尚未解析完成，暂不能查看。</div>
+  {% else %}
+    {% if record.execute_status == "COMPLETED" %}
+      <div class="action-bar">
+        {% if record.txt_file_path %}
+          <a class="button-link" href="/records/{{ record.id }}/download/txt">下载 TXT</a>
+        {% endif %}
+        {% if record.docx_file_path %}
+          <a class="button-link" href="/records/{{ record.id }}/download/docx">下载 DOCX</a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span>原始 URL</span>
+        <a href="{{ record.url }}" target="_blank" rel="noopener noreferrer">{{ record.url }}</a>
+      </div>
+      <div class="detail-item">
+        <span>最终 URL</span>
+        {% if record.final_url %}
+          <a href="{{ record.final_url }}" target="_blank" rel="noopener noreferrer">{{ record.final_url }}</a>
+        {% else %}
+          <strong>-</strong>
+        {% endif %}
+      </div>
+      <div class="detail-item">
+        <span>网页标题</span>
+        <strong>{{ record.title or "-" }}</strong>
+      </div>
+      <div class="detail-item">
+        <span>HTTP 状态</span>
+        <strong>{{ record.http_status or "-" }}</strong>
+      </div>
+      <div class="detail-item">
+        <span>获取状态</span>
+        <strong>{{ record.fetch_status or "-" }}</strong>
+      </div>
+      <div class="detail-item">
+        <span>执行状态</span>
+        <strong>{{ record.execute_status }}</strong>
+      </div>
+      <div class="detail-item">
+        <span>结果类型</span>
+        <strong>{{ record.result_type or "-" }}</strong>
+      </div>
+      <div class="detail-item">
+        <span>错误信息</span>
+        <strong>{{ record.error_message or "-" }}</strong>
+      </div>
+    </div>
+
+    {% if record.summary %}
+      <section class="detail-section">
+        <h2>摘要</h2>
+        <p>{{ record.summary }}</p>
+      </section>
+    {% endif %}
+
+    <section class="detail-section">
+      <h2>正文内容</h2>
+      {% if record.main_content or record.clean_text %}
+        <pre class="content-box">{{ record.main_content or record.clean_text }}</pre>
+      {% else %}
+        <div class="empty-state">未提取到正文内容。</div>
+      {% endif %}
+    </section>
+
+    <section class="detail-section">
+      <h2>附件列表</h2>
+      {% if record.attachments %}
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="number">序号</th>
+                <th>文件名</th>
+                <th>类型</th>
+                <th>链接文字</th>
+                <th>下载链接</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for attachment in record.attachments %}
+              <tr>
+                <td class="number">{{ loop.index }}</td>
+                <td class="truncate" title="{{ attachment.file_name or '' }}">{{ attachment.file_name or "-" }}</td>
+                <td>{{ attachment.file_type or "-" }}</td>
+                <td class="truncate" title="{{ attachment.link_text or '' }}">{{ attachment.link_text or "-" }}</td>
+                <td><a class="table-action" href="{{ attachment.file_url }}" target="_blank" rel="noopener noreferrer">打开链接</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">未提取到附件链接。</div>
+      {% endif %}
+    </section>
+  {% endif %}
+</section>
+{% endblock %}

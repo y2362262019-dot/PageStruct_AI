@@ -1,0 +1,47 @@
+<div class="progress-panel">
+  <div class="progress-metrics">
+    <div>
+      <span>状态</span>
+      <strong>{{ task.status }}</strong>
+    </div>
+    <div>
+      <span>总数</span>
+      <strong>{{ task.total_count }}</strong>
+    </div>
+    <div>
+      <span>完成</span>
+      <strong>{{ task.completed_count }}</strong>
+    </div>
+    <div>
+      <span>失败</span>
+      <strong>{{ task.failed_count }}</strong>
+    </div>
+  </div>
+
+  <div class="action-bar">
+    {% if task.status == "PENDING" %}
+      <button type="button"
+              hx-post="/tasks/{{ task.id }}/start"
+              hx-target="#action-message"
+              hx-swap="innerHTML">
+        开始解析
+      </button>
+    {% elif task.status == "RUNNING" %}
+      <button type="button"
+              hx-post="/tasks/{{ task.id }}/pause"
+              hx-target="#action-message"
+              hx-swap="innerHTML">
+        暂停
+      </button>
+    {% elif task.status == "PAUSED" %}
+      <button type="button"
+              hx-post="/tasks/{{ task.id }}/resume"
+              hx-target="#action-message"
+              hx-swap="innerHTML">
+        继续
+      </button>
+    {% else %}
+      <button type="button" disabled>当前状态不可操作</button>
+    {% endif %}
+  </div>
+</div>

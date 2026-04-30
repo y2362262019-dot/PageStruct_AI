@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}任务详情{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="section-heading">
+    <a class="back-link" href="/tasks">返回任务列表</a>
+    <h1>{{ task.task_name }}</h1>
+    <p>任务类型：{{ task.task_type }} · 状态：{{ task.status }} · 总数：{{ task.total_count }}</p>
+  </div>
+
+  <div id="task-progress"
+       hx-get="/tasks/{{ task.id }}/partials/progress"
+       hx-trigger="load, every 2s"
+       hx-swap="innerHTML">
+    {% include "partials/task_progress.html" %}
+  </div>
+
+  <div id="action-message" class="message-region"></div>
+
+  <div id="record-table"
+       hx-get="/tasks/{{ task.id }}/partials/records"
+       hx-trigger="load, every 3s"
+       hx-swap="innerHTML">
+    {% include "partials/record_table.html" %}
+  </div>
+</section>
+{% endblock %}

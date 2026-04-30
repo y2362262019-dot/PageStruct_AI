@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}任务列表{% endblock %}
+
+{% block content %}
+<section class="panel">
+  <div class="section-heading row-heading">
+    <div>
+      <h1>任务列表</h1>
+      <p>查看已创建的单条和批量解析任务。</p>
+    </div>
+    <a class="button-link" href="/">新建任务</a>
+  </div>
+
+  <div id="task-table"
+       hx-get="/tasks/partials/table"
+       hx-trigger="load, every 3s"
+       hx-swap="innerHTML">
+    {% include "partials/task_table.html" %}
+  </div>
+</section>
+{% endblock %}
