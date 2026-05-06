@@ -50,7 +50,7 @@ def _response_to_result(url: str, response: Response) -> dict[str, Any]:
             error_message=f"HTTP status {response.status_code}",
         )
 
-    response.encoding = response.encoding or response.apparent_encoding
+    response.encoding = response.apparent_encoding
     return _build_result(
         url=url,
         final_url=response.url,

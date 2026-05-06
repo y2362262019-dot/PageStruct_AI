@@ -85,10 +85,27 @@ def _parse_llm_json(raw_content: str) -> dict[str, Any]:
     return json.loads(raw_content)
 
 
+INPUT_MAX_CHARS = 200_000
+
+
+def _truncate_clean_text(input_data: dict[str, Any]) -> dict[str, Any]:
+    clean_text = input_data.get("clean_text", "")
+    if len(clean_text) <= INPUT_MAX_CHARS:
+        return input_data
+
+    truncated = clean_text[:INPUT_MAX_CHARS]
+    input_data["clean_text"] = truncated + "\n\n【注意：原文过长，仅展示了前 {} 字符，后续内容已截断】".format(
+        INPUT_MAX_CHARS
+    )
+    return input_data
+
+
 def _call_llm(input_data: dict[str, Any]) -> str:
     settings = get_settings()
     if not settings.llm_api_key:
         raise RuntimeError("LLM_API_KEY is not configured.")
+
+    input_data = _truncate_clean_text(input_data)
 
     payload = {
         "model": settings.llm_model,
@@ -100,6 +117,7 @@ def _call_llm(input_data: dict[str, Any]) -> str:
             },
         ],
         "temperature": 0,
+        "max_tokens": settings.llm_max_tokens,
         "response_format": {"type": "json_object"},
     }
     headers = {

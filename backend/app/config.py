@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     llm_api_key: Optional[str] = None
     llm_api_url: str = "https://api.openai.com/v1/chat/completions"
     llm_model: str = "gpt-4o-mini"
+    llm_max_tokens: int = 32768
     llm_timeout: int = 60
 
     base_dir: Path = Path(__file__).resolve().parent
