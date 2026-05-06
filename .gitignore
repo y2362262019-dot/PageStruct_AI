@@ -15,3 +15,8 @@ backend/storage/docx/*
 .env
 .env.*
 !backend/.env.example
+
+.claude/
+backend/data/
+package-lock.json
+package.json
